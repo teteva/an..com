@@ -2,6 +2,8 @@ import { IdAttributePlugin, InputPathToUrlTransformPlugin, HtmlBasePlugin } from
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginNavigation from "@11ty/eleventy-navigation";
+import { readFile } from "fs/promises";
+import { existsSync } from "fs";
 // import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import eleventyImg from "@11ty/eleventy-img";
 const { eleventyImageTransformPlugin } = eleventyImg;
@@ -24,13 +26,16 @@ export default async function(eleventyConfig) {
 	});
 
 	// vv
-	eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
-	//
+eleventyConfig.addGlobalData("read", async () => {
+  const path = "./server-only/read.json";
 
-	// vv server-only
-	eleventyConfig.addGlobalData("read", () => require("./server-only/read.json"));
-	//
+  if (!existsSync(path)) {
+    return { read: [] }; // Повертає пустий список, якщо файл не існує
+  }
 
+  const file = await readFile(path, "utf-8");
+  return JSON.parse(file);
+});
 
 	// Copy the contents of the `public` folder to the output folder
 	// For example, `./public/css/` ends up in `_site/css/`
