@@ -1,0 +1,19 @@
+---js
+pagination:
+  data: collections.posts
+  size: 1000
+permalink: "read/index.html"
+eleventyExcludeFromCollections: true
+---
+<h1>Read</h1>
+
+
+{% set readPosts = collections.posts | selectattr("fileSlug", "in", read.read) %}
+
+<ul>
+  {% for post in readPosts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.data.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

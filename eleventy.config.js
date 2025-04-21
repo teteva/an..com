@@ -27,6 +27,11 @@ export default async function(eleventyConfig) {
 	eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
 	//
 
+	// vv server-only
+	eleventyConfig.addGlobalData("read", () => require("./server-only/read.json"));
+	//
+
+
 	// Copy the contents of the `public` folder to the output folder
 	// For example, `./public/css/` ends up in `_site/css/`
 	eleventyConfig
